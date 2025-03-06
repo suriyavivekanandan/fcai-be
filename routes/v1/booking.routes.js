@@ -1,8 +1,12 @@
 import express from 'express'
 
-import bookingRoutes from './booking.routes'
+import * as ctrl from '@/controllers'
+import * as middleware from '@/middlewares'
+
+
 const router = express.Router()
 
 
-router.use('/booking', bookingRoutes)
+
+
 export default router
