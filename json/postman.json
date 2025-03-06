@@ -1,0 +1,136 @@
+{
+    "info": {
+      "name": "User Authentication API",
+      "description": "API for user registration, login, OTP verification, and token management.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Register User",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "description": ""
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\"firstName\":\"John\",\"lastName\":\"Doe\",\"email\":\"john.doe@example.com\",\"password\":\"yourpassword\"}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/register",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "register"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Verify OTP",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "description": ""
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\"email\":\"john.doe@example.com\",\"otp\":\"123456\"}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/verify-otp",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "verify-otp"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Login User",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json",
+              "description": ""
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\"email\":\"john.doe@example.com\",\"password\":\"yourpassword\"}"
+          },
+          "url": {
+            "raw": "{{baseUrl}}/login",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "login"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Refresh Token",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "Cookie",
+              "value": "refreshToken=your_refresh_token",
+              "description": ""
+            }
+          ],
+          "url": {
+            "raw": "{{baseUrl}}/refresh-token",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "refresh-token"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Logout User",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Cookie",
+              "value": "refreshToken=your_refresh_token",
+              "description": ""
+            }
+          ],
+          "url": {
+            "raw": "{{baseUrl}}/logout",
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "path": [
+              "logout"
+            ]
+          }
+        },
+        "response": []
+      }
+    ]
+  }
