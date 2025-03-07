@@ -1,4 +1,4 @@
-import * as Booking from './booking.cotroller'
+import * as bookingController from "./booking.controller.js";
+import * as foodEntryController from "./foodEntry.controller.js";
 
-
-export { Booking}
+export { bookingController, foodEntryController };

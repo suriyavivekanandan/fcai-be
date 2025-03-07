@@ -1,8 +1,10 @@
-import express from 'express'
+import express from "express";
+import bookingRoutes from "./booking.routes";
+import foodEntryRoutes from "./foodEntry.routes";
 
-import bookingRoutes from './booking.routes'
-const router = express.Router()
+const router = express.Router();
 
+router.use("/booking", bookingRoutes);
+router.use("/food-entry", foodEntryRoutes);
 
-router.use('/booking', bookingRoutes)
-export default router
+export default router;

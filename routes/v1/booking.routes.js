@@ -1,12 +1,9 @@
-import express from 'express'
+const express = require("express");
+const router = express.Router();
+const bookingController = require("../../controllers/v1/booking.controller");
 
-import * as ctrl from '@/controllers'
-import * as middleware from '@/middlewares'
+router.get("/available", bookingController.getAvailableFood);
+router.get("/", bookingController.getAllBookings);
+router.post("/", bookingController.createBooking);
 
-
-const router = express.Router()
-
-
-
-
-export default router
+module.exports = router;
