@@ -1,11 +1,72 @@
-exports.getAvailableFood = (req, res) => {
-  res.status(200).json({ message: "Available food data" });
+import Booking from "../../models/booking.model.js";
+import FoodEntry from "../../models/foodEntry.model.js";
+
+// Create a new booking
+export const createBooking = async (req, res) => {
+  try {
+    const { food_entry_id, person_name, contact_number, trust_name } = req.body;
+
+    if (!food_entry_id || !person_name || !contact_number || !trust_name) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Check if the FoodEntry exists
+    const foodEntry = await FoodEntry.findById(food_entry_id);
+    if (!foodEntry) {
+      return res.status(404).json({ message: "Food entry not found" });
+    }
+
+    // Create the booking
+    const newBooking = new Booking({
+      food_entry_id,
+      person_name,
+      contact_number,
+      trust_name,
+    });
+    await newBooking.save();
+
+    // Set remaining weight to 0 to remove from available list
+    foodEntry.remaining_weight = 0;
+    await foodEntry.save();
+
+    // Populate food entry before sending back
+    const populatedBooking = await Booking.findById(newBooking._id).populate("food_entry_id");
+
+    res.status(201).json(populatedBooking);
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.getAllBookings = (req, res) => {
-  res.status(200).json({ message: "All bookings data" });
+// Get all bookings
+export const getAllBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find().populate("food_entry_id");
+    res.status(200).json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.createBooking = (req, res) => {
-  res.status(201).json({ message: "Booking created successfully" });
+// Get a booking by ID
+export const getBookingById = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id).populate("food_entry_id");
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
+    res.status(200).json(booking);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete booking
+export const deleteBooking = async (req, res) => {
+  try {
+    const deleted = await Booking.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "Booking not found" });
+    res.status(200).json({ message: "Booking deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

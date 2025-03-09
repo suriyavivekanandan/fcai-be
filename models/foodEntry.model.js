@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const FoodEntrySchema = new mongoose.Schema(
   {
-    _id: { type: String, default: uuidv4 }, // UUID as primary key
+    _id: { type: String, default: uuidv4 },
     date: { type: Date, required: true },
     meal_type: {
       type: String,
@@ -17,5 +17,5 @@ const FoodEntrySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const FoodEntry = mongoose.model("FoodEntry", FoodEntrySchema);
+const FoodEntry = mongoose.models.FoodEntry || mongoose.model("FoodEntry", FoodEntrySchema);
 export default FoodEntry;

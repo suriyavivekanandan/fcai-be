@@ -1,6 +1,6 @@
 import express from "express";
-import bookingRoutes from "./booking.routes";
-import foodEntryRoutes from "./foodEntry.routes";
+import bookingRoutes from "./booking.routes.js";
+import foodEntryRoutes from "./foodEntry.routes.js"; // <-- Add .js
 
 const router = express.Router();
 
