@@ -14,7 +14,6 @@ export const createFoodEntry = async (req, res) => {
 
     res.status(201).json(newEntry);
   } catch (error) {
-    console.error("Error creating food entry:", error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -26,6 +25,16 @@ export const getFoodEntries = async (req, res) => {
     res.status(200).json(entries);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+// ✅ Get available food (not booked)
+export const getAvailableFood = async (req, res) => {
+  try {
+    const availableFood = await FoodEntry.find({ booked: false });
+    res.status(200).json(availableFood);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -41,31 +50,23 @@ export const getFoodEntryById = async (req, res) => {
   }
 };
 
-// Update a food entry (ensuring no duplicate declaration)
+// Update a food entry
 export const updateFoodEntry = async (req, res) => {
   try {
     const { remaining_weight } = req.body;
     const entry = await FoodEntry.findById(req.params.id);
     if (!entry) return res.status(404).json({ message: "Entry not found" });
 
-    // Ensure remaining_weight is a valid number
     const parsedWeight = parseFloat(remaining_weight);
-    if (isNaN(parsedWeight) || parsedWeight < 0) {
-      return res.status(400).json({ message: "Remaining weight must be a valid non-negative number" });
+    if (isNaN(parsedWeight) || parsedWeight < 0 || parsedWeight > entry.initial_weight) {
+      return res.status(400).json({ message: "Invalid remaining weight" });
     }
 
-    // Ensure remaining_weight is not greater than initial_weight
-    if (parsedWeight > entry.initial_weight) {
-      return res.status(400).json({ message: "Remaining weight cannot be greater than initial weight" });
-    }
-
-    // Update the entry
     entry.remaining_weight = parsedWeight;
     await entry.save();
 
     res.status(200).json(entry);
   } catch (error) {
-    console.error("Error updating food entry:", error);
     res.status(500).json({ error: error.message });
   }
 };

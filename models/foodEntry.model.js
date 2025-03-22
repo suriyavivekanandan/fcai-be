@@ -13,6 +13,7 @@ const FoodEntrySchema = new mongoose.Schema(
     food_item: { type: String, required: true },
     initial_weight: { type: Number, required: true, min: 0.01 },
     remaining_weight: { type: Number, min: 0, default: null },
+    booked: { type: Boolean, default: false }  // ✅ NEW FIELD
   },
   { timestamps: true }
 );

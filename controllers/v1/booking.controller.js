@@ -10,13 +10,15 @@ export const createBooking = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // Check if the FoodEntry exists
     const foodEntry = await FoodEntry.findById(food_entry_id);
     if (!foodEntry) {
       return res.status(404).json({ message: "Food entry not found" });
     }
 
-    // Create the booking
+    if (foodEntry.booked) {
+      return res.status(400).json({ message: "Food already booked" });
+    }
+
     const newBooking = new Booking({
       food_entry_id,
       person_name,
@@ -25,16 +27,14 @@ export const createBooking = async (req, res) => {
     });
     await newBooking.save();
 
-    // Set remaining weight to 0 to remove from available list
     foodEntry.remaining_weight = 0;
+    foodEntry.booked = true;  // ✅ Mark as booked
     await foodEntry.save();
 
-    // Populate food entry before sending back
     const populatedBooking = await Booking.findById(newBooking._id).populate("food_entry_id");
 
     res.status(201).json(populatedBooking);
   } catch (error) {
-    console.error("Error creating booking:", error);
     res.status(500).json({ message: error.message });
   }
 };
